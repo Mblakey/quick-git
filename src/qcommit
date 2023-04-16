@@ -1,0 +1,37 @@
+#!/bin/bash
+
+ARGC=("$#")
+ARGV=("$@")
+MESSAGE=""
+
+function display_usage {
+  echo "usage: qcommit <message>"
+  exit 1;
+}
+
+function process_cl {
+	for ((i=0; i<$ARGC; i++))
+	do
+		INPUT=${ARGV[i]}
+  	case $INPUT in
+    	-*|--*)
+      	echo "Error: Unknown option $INPUT"
+      	display_usage
+      	;;
+    	*)
+      	MESSAGE=$INPUT
+      	;;
+  	esac
+	done
+}
+
+process_cl
+
+if [ -z "$MESSAGE" ]; then
+	echo "Error: must provide a message for commit"
+	display_usage
+else 
+	git add -A
+	git commit -m "$MESSAGE"
+	exit 0
+fi
